@@ -1,0 +1,18 @@
+{
+  "maps": [
+    {
+      "id": "City",
+      "displayName": "City Map",
+      "map": "/Game/Maps/CityMap",
+      "version": 1,
+      "chunk_id": 1
+    },
+    {
+      "id": "Desert",
+      "displayName": "Desert Map",
+      "map": "/Game/Maps/DesertMap",
+      "version": 1,
+      "chunk_id": 2
+    }
+  ]
+}
