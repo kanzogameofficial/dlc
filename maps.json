@@ -3,16 +3,16 @@
     {
       "id": "City",
       "displayName": "City Map",
+      "mapPath": "/Game/Maps/CityMap",
       "latestVersion": 1,
-      "chunkId": 1,
-      "mapPath": "/Game/Maps/CityMap"
+      "chunkId": 1
     },
     {
       "id": "Desert",
       "displayName": "Desert Map",
+      "mapPath": "/Game/Maps/DesertMap",
       "latestVersion": 1,
-      "chunkId": 2,
-      "mapPath": "/Game/Maps/DesertMap"
+      "chunkId": 2
     }
   ]
 }
