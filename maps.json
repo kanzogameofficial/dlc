@@ -1,20 +1,16 @@
 {
   "maps": [
     {
-      "id": "desert",
-      "displayName": "Desert Map",
-      "level": "Map_Desert",
-      "chunkId": 1,
-      "sizeMB": 220,
-      "version": 1
+      "id": "City",
+      "displayName": "City Map",
+      "latestVersion": 1,
+      "chunkId": 1
     },
     {
-      "id": "city",
-      "displayName": "City Map",
-      "level": "Map_City",
-      "chunkId": 2,
-      "sizeMB": 310,
-      "version": 1
+      "id": "Desert",
+      "displayName": "Desert Map",
+      "latestVersion": 1,
+      "chunkId": 2
     }
   ]
 }
