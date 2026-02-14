@@ -1,24 +1,26 @@
+🚀 Unreal Engine 5 – On-Demand Map Download System (DLC / PAK Streaming)
 
-Video: https://www.youtube.com/watch?v=MMg0mkJ5v-M
+📺 Video Tutorial
+👉 https://www.youtube.com/watch?v=MMg0mkJ5v-M
 
-🚀 Unreal Engine On-Demand Map Download System (DLC / PAK Streaming)
+This repository contains a fully working on-demand map download (DLC) system for Unreal Engine 5.x, built using:
 
-This repository contains a fully working on-demand map download system for Unreal Engine 5.x using:
+🌐 HTTP-hosted .pak files
 
-HTTP hosted .pak files
+📄 JSON-based version control
 
-JSON-based version control
+📦 Runtime PAK downloading & mounting
 
-Runtime PAK mounting
+💾 Persistent install state (no re-download after restart)
 
-Persistent install state (no re-download after restart)
+🎮 UI-driven Download / Play flow
 
-UI-driven download / play flow
+✅ Works on Windows & Android (ASTC)
+🧩 Easily extendable to iOS
 
-Designed for Windows & Android (ASTC) and easily extendable to iOS.
-
-📐 SYSTEM ARCHITECTURE
-Server (HTTP)
+📐 System Architecture
+🌍 Server (HTTP)
+/dlc
  ├── maps.json
  ├── windows/
  │    └── v1/
@@ -29,25 +31,32 @@ Server (HTTP)
  └── ios/
       └── v1/
            └── pakchunk1-iOS.pak
-Unreal Game
- ├── MapVersionSubsystem (JSON + versioning)
- ├── PakDownloaderSubsystem (Download + Mount)
+🎮 Unreal Engine Project
+/Game
+ ├── Subsystems
+ │    ├── MapVersionSubsystem
+ │    └── PakDownloaderSubsystem
  ├── UI
  │    ├── WBP_MapList
  │    └── WBP_MapRow
- └── Saved/DLC/local_maps.json (installed state)
-🌐 BASE URL (SERVER ROOT)
+ └── Saved/
+      └── DLC/
+           └── local_maps.json
+🌐 Base URL (Server Root)
 
-Use ONLY root URL, never full file paths.
+⚠️ Always pass ONLY the root folder URL
+❌ Never use full file paths
 
-Example (Local XAMPP)
+✅ Local (XAMPP)
 http://127.0.0.1/dlc
-Example (GitHub CDN via jsDelivr)
+✅ GitHub CDN (jsDelivr)
 https://cdn.jsdelivr.net/gh/kanzogameofficial/dlc@main
 
-⚠️ Note: jsDelivr has caching. For instant updates use:
+⚠️ jsDelivr caches aggressively
 
-XAMPP
+For instant updates, prefer:
+
+XAMPP (local testing)
 
 Cloudflare Pages
 
@@ -55,7 +64,7 @@ Netlify
 
 Firebase Hosting
 
-📄 SERVER JSON FORMAT (maps.json)
+📄 Server JSON Format (maps.json)
 {
   "maps": [
     {
@@ -77,28 +86,30 @@ Firebase Hosting
 Field Explanation
 Field	Description
 id	Unique map identifier
-displayName	UI name
-mapPath	Unreal travel path
-latestVersion	Version on server
+displayName	Display name in UI
+mapPath	Unreal level travel path
+latestVersion	Server version
 chunkId	Chunk / PAK ID
-🧠 CORE SUBSYSTEMS
+🧠 Core Subsystems
 1️⃣ MapVersionSubsystem
 
-Responsibilities:
+Responsibilities
 
 Download maps.json
 
+Parse map metadata
+
 Compare server vs local versions
 
-Decide Install / Update / Play
+Decide Download / Update / Play
 
-Save installed versions to disk
+Persist install state
 
-Local file:
+📁 Local file:
 
 Saved/DLC/local_maps.json
 
-Example:
+Example
 
 {
   "maps": [
@@ -107,20 +118,20 @@ Example:
 }
 2️⃣ PakDownloaderSubsystem
 
-Responsibilities:
+Responsibilities
 
-Download .pak via HTTP
+Download .pak files via HTTP
 
 Save to persistent storage
 
 Mount PAK at runtime
 
-Fire OnFinished event
+Broadcast OnFinished
 
-Mount location:
+📂 Mount location:
 
-ProjectPersistentDownloadDir()
-🎮 UI ARCHITECTURE
+FPaths::ProjectPersistentDownloadDir()
+🎮 UI Architecture
 WBP_MapList
 
 Calls LoadMapData(BaseURL)
@@ -131,36 +142,35 @@ Creates WBP_MapRow per map
 
 WBP_MapRow (Single Card)
 
-Variables:
+Variables
 
 Name	Type	Expose on Spawn
 MapInfo	FMapInfo	✅
 BaseURL	String	✅
 Button Logic
-
-Download
+📥 Download
 
 Show "Downloading..."
 
-Disable button
+Disable Download button
 
 Call DownloadPak()
 
-On Download Finished
+✅ On Download Finished
 
-MarkMapInstalled()
+Call MarkMapInstalled(MapId, Version)
 
-InitRow() (refresh UI)
+Call InitRow() to refresh UI
 
-Play
+▶️ Play
 
 OpenLevel(MapInfo.MapPath)
 
-🔁 UI FLOW (IMPORTANT)
+🔁 UI Flow (Very Important)
 Game Start
  └── LoadMapData
       └── JSON parsed
-           └── UI Cards created
+           └── UI cards created
                 ├── Download
                 ├── Downloading...
                 └── Play
@@ -170,21 +180,21 @@ Download Click
  └── OnFinished
       ├── Save installed version
       └── Refresh UI → "Play"
-📦 HOW TO CREATE PAK FILES (STEP BY STEP)
+📦 Creating PAK Files (Step-by-Step)
 1️⃣ Assign Maps to Chunks
 
 CityMap → Chunk ID 1
 
 DesertMap → Chunk ID 2
 
-Use:
+Use either:
 
 Primary Asset Labels
-or
 
-Packaging settings → Map list per chunk
+Packaging → Map list per chunk
 
 2️⃣ Packaging Settings
+
 Project Settings → Packaging
 
 Enable:
@@ -199,62 +209,60 @@ Set:
 
 Http Chunk Install Data Directory = ChunkOutput
 Http Chunk Install Data Version   = v1
-3️⃣ Build Platform
+3️⃣ Build Platforms
 
 Windows → Shipping
 
 Android → ASTC
 
-4️⃣ Find Output
+4️⃣ Output Location
 <ProjectRoot>/ChunkOutput/
  ├── Windows/v1/pakchunk1-Windows.pak
  ├── Android_ASTC/v1/pakchunk1-Android_ASTC.pak
 5️⃣ Upload to Server
 
-Upload only platform folder, NOT ChunkOutput root.
+⚠️ Upload ONLY platform folders
 
-/dlc/
+/dlc
  ├── maps.json
  ├── windows/v1/*.pak
  ├── android/v1/*.pak
  └── ios/v1/*.pak
-🧪 TESTING CHECKLIST
 
- Download shows "Downloading..."
+❌ Do NOT upload ChunkOutput root
 
- Download completes → Play appears
+🧪 Testing Checklist
 
- App restart → still Play
+✅ Download shows "Downloading..."
+✅ Download finishes → Play appears
+✅ App restart → Play still available
+✅ No duplicate downloads
+✅ Correct map loads
+✅ Platform-specific pak auto selected
 
- No duplicate downloads
-
- Correct map opens
-
- Platform-specific pak auto selected
-
-🚫 COMMON MISTAKES
+🚫 Common Mistakes
 
 ❌ Calling InitRow() only once
-❌ Using full pak URL instead of BaseURL
+❌ Passing full pak URL instead of BaseURL
 ❌ Hardcoding platform in Blueprint
 ❌ Mounting to wrong directory
-❌ Not saving local install state
+❌ Not saving install state
 
-🏁 FINAL RESULT
+🏁 Final Result
 
 ✔ Fully dynamic
 ✔ Version controlled
 ✔ Platform aware
-✔ Persistent
+✔ Persistent across restarts
 ✔ Production-ready DLC system
 
-📌 FUTURE IMPROVEMENTS
+📌 Future Improvements
 
 Download progress bar
 
-Size estimation
+File size estimation
 
-Resume / cancel download
+Resume / cancel downloads
 
 Delta patching
 
